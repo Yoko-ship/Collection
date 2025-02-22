@@ -3,16 +3,11 @@ import Inputs from "./Inputs";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Messages from "./Messages";
+import FormElement from "./FormElement";
 
-function Login({setToken,error,setError,success,setSuccess}) {
+function Login({setToken,error,setError,success,setSuccess,clearFunction}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
-  const clearFunction = () => {
-    setEmail("");
-    setPassword("");
-    setError("");
-  };
 
   const navigate = useNavigate();
   const buttonHandler = (e) => {
@@ -24,7 +19,7 @@ function Login({setToken,error,setError,success,setSuccess}) {
         localStorage.setItem("token", token);
         setToken(token)
         setSuccess("Вы успешно вошли в свой аккаунт")
-        clearFunction();
+        clearFunction({value1:setEmail,value2:setPassword,value3:setError});
         navigate("/");
       })
       .catch((err) => {
@@ -34,8 +29,8 @@ function Login({setToken,error,setError,success,setSuccess}) {
 
   return (
     <div>
-      <form className="flex flex-col items-center">
-        <Inputs
+      <FormElement buttonHandler={buttonHandler}>
+      <Inputs
           name={"Почта"}
           type={"email"}
           getValue={setEmail}
@@ -47,23 +42,15 @@ function Login({setToken,error,setError,success,setSuccess}) {
           getValue={setPassword}
           value={password}
         />
-        <div className="p-5">
-          <button
-            className="bg-green-900 text-white p-2 rounded-xl cursor-pointer"
-            onClick={(e) => buttonHandler(e)}
-          >
-            Авторизация
-          </button>
-        </div>
-      </form>
+      </FormElement>
       <div className=" w-40 m-auto ">
-        <p className="p-2 text-center hover:scale-110 transition-all">
+        <p className="p-2 text-center hover:scale-110 transition-all" onClick={() => setError("")}>
           <Link className="text-2xl text-blue-400" to={"/register"}>
             Регистрация
           </Link>
         </p>
       </div>
-      <Messages error={error} success={success}/>
+      <Messages error={error.error} success={success}/>
     </div>
   );
 }

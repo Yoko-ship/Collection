@@ -2,37 +2,35 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {jwtDecode } from "jwt-decode";
 import Menu from "./Menu";
+import LiElements from "./LiElements";
 
-function Header({token,btnHandler}) {
+function Header({token,btnHandler,handleMessages}) {
   const [letterEmail,setLetterEmail] = useState("")
-  const [bgColor,setBgColor] = useState("255")
+  const [bgColor,setBgColor] = useState("")
   const [email,setEmail] = useState("")
   const [open,setOpen] = useState(false)
 
-  const stringToColor = function stringToColor(str) {
-    var hash = 0;
-    var color = '#';
-    var i;
-    var value;
-    var strLength;
 
-    if(!str) {
-        return color + '333333';
+  //* Генерация цветных аватарок
+  const stringToColor = (str = '') => {
+    if (!str) return '#333333';
+
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash * 31 + str.charCodeAt(i)) & 0xFFFFFFFF;
     }
 
-    strLength = str.length;
+    hash = (hash ^ (hash >> 16)) * 0x45d9f3b;
+    hash = (hash ^ (hash >> 16)) * 0x45d9f3b;
+    hash = hash ^ (hash >> 16);
 
-    for (i = 0; i < strLength; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
+    let r = (hash >> 16) & 0xFF;
+    let g = (hash >> 8) & 0xFF;
+    let b = hash & 0xFF;
 
-    for (i = 0; i < 3; i++) {
-        value = (hash >> (i * 8)) & 0xFF;
-        color += ('00' + value.toString(16)).slice(-2);
-    }
-
-    return color;
+    return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}`;
 };
+
 
 
 const openHandler = () =>{
@@ -49,18 +47,13 @@ useEffect(() =>{
     setLetterEmail(letter)
     setBgColor(backgroundColor)
   }
-},[token])
-
+},[token])  
 
   return (
     <header className="bg-amber-800 pb-1">
-      <ul className="flex justify-between p-2 text-xl">
-        <li className="p-2 text-sky-200 hover:scale-110  hover:cursor-pointer hover:transition-all">
-          <Link to="/">Главное Меню</Link>
-        </li>
-        <li className="p-2 text-sky-200 hover:scale-110 hover:cursor-pointer hover:transition-all">
-          <Link to="/add">Добавить</Link>
-        </li>
+      <ul className="flex justify-between p-2 text-xl" onClick={handleMessages}>
+        <LiElements name={"Главное меню"} path={"/"}/>
+        <LiElements name={"Добавить"} path={"/add"}/>
         {token ? (
           <li className="relative" onClick={openHandler}>
             <div className="rounded-full w-15 h-15 cursor-pointer" style={{
@@ -73,9 +66,7 @@ useEffect(() =>{
             )}
           </li>
         ) : (
-          <li className="p-2 text-sky-200 hover:scale-110 hover:cursor-pointer hover:transition-all">
-            <Link to="/login">Авторизация</Link>
-          </li>
+          <LiElements name={"Авторизация"} path={"/login"}/>
         )}
       </ul>
     </header>

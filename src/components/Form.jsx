@@ -3,8 +3,9 @@ import Inputs from "./Inputs";
 import Select from "react-select";
 import axios from "axios";
 import Messages from "./Messages";
+import FormElement from "./FormElement";
 
-function Form({token,setSuccess,success,setError,error}) {
+function Form({ token, setSuccess, success, setError, error, clearFunction }) {
   const options = [
     { value: "Игра", label: "Игра" },
     { value: "Фильм", label: "Фильм" },
@@ -14,55 +15,60 @@ function Form({token,setSuccess,success,setError,error}) {
 
   const [nameValue, setNameValue] = useState("");
   const [rating, setRating] = useState("");
-  const [category, setCategory] = useState("");
-
-  const clearFunction = () =>{
-    setNameValue("")
-    setRating("")
-    setCategory("")
-    setError("")
-  }
-
-  const buttonHandler = async() => {
-    axios.post("http://localhost:3000/add",{nameValue,rating,category},{
-      headers:{
-        Authorization:`Bearer ${token}`
-      }
-    })
-    .then((response) =>{
-      setSuccess("Данные успешно переданы")
-      clearFunction()
-    })
-    .catch((err) =>{
-      setError(err.response ? err.response.data : err.message)
-      setSuccess("")
-    })
+  const [category, setCategory] = useState(null);
+  const buttonHandler = async () => {
+    const categoryValue = category.value
+    axios
+      .post(
+        "http://localhost:3000/add",
+        { nameValue, rating, categoryValue },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        setSuccess("Данные успешно переданы");
+        clearFunction({
+          value1: setNameValue,
+          value2: setRating,
+          value3: setCategory,
+          value4: setError(""),
+        });
+      })
+      .catch((err) => {
+        setError(err.response ? err.response.data : err.message);
+        setSuccess("");
+      });
   };
-
 
   return (
     <div>
-      <form className="flex items-center flex-col">
-        <Inputs name={"Названия"} type={"text"} getValue={setNameValue} value={nameValue} />
-        <Inputs name={"Рейтинг"} type={"number"} getValue={setRating} value={rating}/>
+      <FormElement buttonHandler={buttonHandler}>
+        <Inputs
+          name={"Названия"}
+          type={"text"}
+          getValue={setNameValue}
+          value={nameValue}
+        />
+        <Inputs
+          name={"Рейтинг"}
+          type={"number"}
+          getValue={setRating}
+          value={rating}
+        />
         <Select
           options={options}
           className="text-2xl  pt-3 w-1/4 "
           placeholder="Категория"
-          onChange={(e) => setCategory(e.value)}
+          defaultValue={category}
+          onChange={setCategory}
+          value={category}
+          isClearable
         />
-        <div className="p-3">
-          <button
-            type="button"
-            className="bg-green-800 text-white p-3 cursor-pointer rounded-xl"
-            onClick={buttonHandler}
-          >
-            Подтвердит
-          </button>
-        </div>
-      </form>
-
-      <Messages error={error} success={success}/>
+      </FormElement>
+      <Messages error={error.error} success={success} />
     </div>
   );
 }

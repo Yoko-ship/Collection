@@ -10,7 +10,7 @@ function Messages({success,error}) {
       )}
       {error && (
         <div className="flex justify-center p-2">
-          <p className="text-red-500">{error.error}</p>
+          <p className="text-red-500">{error}</p>
         </div>
       )}
     </>

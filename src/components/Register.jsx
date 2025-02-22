@@ -1,29 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Inputs from "./Inputs";
 import { useState } from "react";
 import axios from "axios";
+import FormElement from "./FormElement";
+import Messages from "./Messages";
 
-function Register() {
+function Register({error,success,setSuccess,setError,clearFunction}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const buttonHandler = (e) => {
     e.preventDefault();
     if (password.length >= 8 && /[a-zA-Z]/.test(password)) {
       axios
         .post("http://localhost:3000/register", { name, email, password })
         .then((response) => {
-          console.log("Регистрация прошла успешно", response.data);
-          setError("");
-          setName("");
-          setEmail("");
-          setPassword("");
           setSuccess("Регистрация прошла успешно");
+          clearFunction({value1:setName,value2:setEmail,value3:setPassword,value4:setError})
         })
         .catch((err) => {
-          setError(err.response ? err.response.data : err.message);
+          const text = err.response ? err.response.data : err.message
+          setError(text.error);
           setSuccess("");
         });
     } else {
@@ -35,30 +32,15 @@ function Register() {
   };
   return (
     <div>
-      <form className="flex flex-col items-center">
+      <FormElement buttonHandler={buttonHandler}>
         <Inputs name={"Имя"} type={"text"} getValue={setName} value={name}/>
         <Inputs name={"Почта"} type={"email"} getValue={setEmail} value={email} />
         <Inputs name={"Пароль"} type={"password"} getValue={setPassword} value={password}/>
-        <div className="p-5">
-          <button
-            className="bg-green-900 text-white p-2 rounded-xl cursor-pointer"
-            onClick={(e) => buttonHandler(e)}
-          >
-            Регистрация
-          </button>
-        </div>
-        {error && (
-          <div>
-            <p className="text-red-600 text-xl">{error}</p>
-          </div>
-        )}
-        {success && (
-          <div>
-            <p className="text-green-700 text-xl">{success}</p>
-          </div>
-        )}
-      </form>
+      </FormElement>
+
+      <Messages success={success} error={error}/>
     </div>
+  
   );
 }
 
