@@ -51,12 +51,12 @@ useEffect(() =>{
 
   return (
     <header className="bg-amber-800 pb-1">
-      <ul className="flex justify-between p-2 text-xl" onClick={handleMessages}>
+      <ul className="flex justify-between p-2 text-xl " onClick={handleMessages}>
         <LiElements name={"Главное меню"} path={"/"}/>
         <LiElements name={"Добавить"} path={"/add"}/>
         {token ? (
-          <li className="relative" onClick={openHandler}>
-            <div className="rounded-full w-15 h-15 cursor-pointer" style={{
+          <li className="" onClick={openHandler}>
+            <div className="rounded-full w-15 h-15 cursor-pointer " style={{
               backgroundColor:bgColor
             }}>
               <p className="flex justify-center items-center h-13 text-white ">{letterEmail}</p>

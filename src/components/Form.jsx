@@ -5,14 +5,14 @@ import axios from "axios";
 import Messages from "./Messages";
 import FormElement from "./FormElement";
 
-function Form({ token, setSuccess, success, setError, error, clearFunction }) {
-  const options = [
-    { value: "Игра", label: "Игра" },
-    { value: "Фильм", label: "Фильм" },
-    { value: "Сериал", label: "Сериал" },
-    { value: "Аниме", label: "Аниме" },
-  ];
+const options = [
+  { value: "Игра", label: "Игра" },
+  { value: "Фильм", label: "Фильм" },
+  { value: "Сериал", label: "Сериал" },
+  { value: "Аниме", label: "Аниме" },
+];
 
+function Form({ token, setSuccess, success, setError, error, clearFunction}) {
   const [nameValue, setNameValue] = useState("");
   const [rating, setRating] = useState("");
   const [category, setCategory] = useState(null);
@@ -21,7 +21,7 @@ function Form({ token, setSuccess, success, setError, error, clearFunction }) {
     axios
       .post(
         "http://localhost:3000/add",
-        { nameValue, rating, categoryValue },
+        { nameValue, rating, categoryValue},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,6 +42,8 @@ function Form({ token, setSuccess, success, setError, error, clearFunction }) {
         setSuccess("");
       });
   };
+
+
 
   return (
     <div>
