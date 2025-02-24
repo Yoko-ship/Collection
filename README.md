@@ -1,8 +1,33 @@
-# React + Vite
+# 🌟 Blog Colllection
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+&#x20; &#x20;
 
-Currently, two official plugins are available:
+## 🚀 Описание проекта
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Некий блог для учета просмотренных/сыгранных игр,фильмов
+
+## 🔧 Установка и запуск
+
+```bash
+# Клонирование репозитория
+git clone https://github.com/Yoko-ship/Collection.git
+cd repository
+
+# Установка зависимостей
+npm install
+
+# Запуск проекта
+node backend.cjs && npm start
+```
+
+## 🛠 Используемые технологии
+
+- 🟢 React
+- 🎨 NodeJS(backend)
+## 🤝 Контрибьюция
+
+1. Сделайте **Fork** репозитория
+2. Создайте новую **ветку** (`git checkout -b feature-branch`)
+3. Внесите изменения и **закоммитьте** их (`git commit -m 'Новая фича'`)
+4. Отправьте изменения (`git push origin feature-branch`)
+5. Создайте **Pull Request**
